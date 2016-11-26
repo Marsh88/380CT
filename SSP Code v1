@@ -18,6 +18,7 @@ class SSP():
     def random_instance(self, n, bitlength=10):
         max_n_bit_number = 2**bitlength-1
         self.S = sorted( [ randint(0,max_n_bit_number) for i in range(n) ] , reverse=True)
+        
         self.t = randint(0,n*max_n_bit_number)
         self.n = len( self.S )
 
@@ -36,10 +37,27 @@ class SSP():
             candidate = sample(self.S, randint(0,self.n))
             total     = sum(candidate)
             print( "Trying: ", candidate, ", sum:", total )
-            
 
+    def try_Exaust_search(self):
+        candidate=[]
+        total = 0
+        print( "Trying: ", candidate, ", sum:", total )
+        for j in range (self.n):
+            print (j)
+            k=1
+            while k+j <=self.n :
+                for l in range (k):
+                    if l<self.n and l!=k:
+                        candidate.append(self.S[l+j])
+                total = sum(candidate)
+                print( "Trying: ", candidate, ", sum:", total )
+                k+=1
+                if total== self.t:
+                    return ("found")
+                candidate = []
 instance = SSP()
 instance.random_yes_instance(4)
 print( instance )
 
-instance.try_at_random()
+#instance.try_at_random()
+instance.try_Exaust_search()
