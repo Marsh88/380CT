@@ -28,7 +28,6 @@ class SSP():
         self.t = sum( sample(self.S, randint(0,n)) )
         self.n = len( self.S )
 
-    ###
 
     def try_at_random(self):
         candidate = []
@@ -42,18 +41,22 @@ class SSP():
         candidate=[]
         total = 0
         print( "Trying: ", candidate, ", sum:", total )
-        for j in range (self.n):
+        for j in range ((2**(self.n))-1):
             print (j)
-            k=1
-            while k+j <=self.n :
-                for l in range (k):
-                    if l<self.n and l!=k:
-                        candidate.append(self.S[l+j])
+            k=0
+            while k <=self.n :
+                for m in range (self.n-1):
+                    if len(candidate)<j+1:
+                        for l in range(j+1):
+                            if l+k<self.n :
+                                candidate.append(self.S[l+k])
+                        else:
+                            candidate.append(self.S[l+m])
                 total = sum(candidate)
                 print( "Trying: ", candidate, ", sum:", total )
                 k+=1
                 if total== self.t:
-                    return ("found")
+                    return 0
                 candidate = []
 instance = SSP()
 instance.random_yes_instance(4)
@@ -61,3 +64,4 @@ print( instance )
 
 #instance.try_at_random()
 instance.try_Exaust_search()
+
