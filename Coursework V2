@@ -1,0 +1,76 @@
+from random import randint, sample
+from itertools import chain, combinations
+from time import time
+
+class SSP():
+    def __init__(self, S=[], t=0):
+        self.S = S
+        self.t = t
+        self.n = len(S)
+        #
+        self.decision = False
+        self.total    = 0
+        self.selected = []
+
+    def __repr__(self):
+        return "SSP instance: S="+str(self.S)+"\tt="+str(self.t)
+    
+    def random_instance(self, n, bitlength=10):
+        max_n_bit_number = 2**bitlength-1
+        self.S = sorted( [ randint(0,max_n_bit_number) for i in range(n) ] , reverse=True)
+        
+        self.t = randint(0,n*max_n_bit_number)
+        self.n = len( self.S )
+
+    def random_yes_instance(self, n, bitlength=10):
+        max_n_bit_number = 2**bitlength-1
+        self.S = sorted( [ randint(0,max_n_bit_number) for i in range(n) ] , reverse=True)
+        self.t = sum( sample(self.S, randint(0,n)) )
+        self.n = len( self.S )
+
+
+    def try_at_random(self):
+        candidate = []
+        total = 0
+        while total != self.t:
+            candidate = sample(self.S, randint(0,self.n))
+            total     = sum(candidate)
+            print( "Trying: ", candidate, ", sum:", total )
+
+    def try_Exaust_search(self):
+        candidate=[]
+        total     = sum(candidate)
+        print( "Trying: ", candidate, ", sum:", total )
+        if total == self.t:
+            return 0
+        for j in range ((self.n)):
+            print (j)
+            for i in range (self.n-j):
+                if j==0:
+                    candidate.append(self.S[i])
+                    total     = sum(candidate)
+                    print( "Trying: ", candidate, ", sum:", total )
+                    if total == self.t:
+                        return 0
+                    candidate =[]
+                else:
+                    for l in range (self.n-j):
+                        candidate.append(self.S[i])
+                        for n in range(j):
+                            if 1+i+l+n<self.n:
+                                candidate.append(self.S[1+i+l+n])
+                        if len(candidate)==j+1:
+                            total     = sum(candidate)
+                            print( "Trying: ", candidate, ", sum:", total )
+                            if total == self.t:
+                                return 0
+                        candidate =[]
+        print ("candidate not found")
+
+        
+instance = SSP()
+instance.random_yes_instance(4)
+print( instance )
+
+#instance.try_at_random()
+instance.try_Exaust_search()
