@@ -7,6 +7,7 @@ class SSP():
         self.S = S
         self.t = t
         self.n = len(S)
+        self.count= 0
         self.decision = False
         self.total    = 0
         self.selected = []
@@ -40,56 +41,52 @@ class SSP():
         candidate=[]
         total     = sum(candidate)
         print( "Trying: ", candidate, ", sum:", total )
-        v=0
         if total == self.t:
             return 0
-        for j in range ((self.n)):
-            v+=1
-            print (j)
-            for i in range (self.n-j):
-                v+=1
-                if j==0:
-                    candidate.append(self.S[i])
+        for j in range (self.n):
+            for i in range(j,self.n):
+                
+                for count in range(i,self.n):
+                    candidate.append(self.S[count])
                     total     = sum(candidate)
                     print( "Trying: ", candidate, ", sum:", total )
                     if total == self.t:
                         return 0
-                    candidate =[]
-                else:
-                    for l in range (self.n-j):
-                        v+=1
-                        candidate.append(self.S[i])
-                        for n in range(j):
-                            v+=1
-                            if 1+i+l+n<self.n:
-                                candidate.append(self.S[1+i+l+n])
-                        if len(candidate)==j+1:
-                            total     = sum(candidate)
-                            print( "Trying: ", candidate, ", sum:", total )
-                            if total == self.t:
-                                return 0
-                        candidate =[]
-        print ("candidate not found")
+                candidate=[]
+                candidate.append(self.S[j])
+
+    def try_Exaust_search2(self):
+        candidate=self.S
+        if (self.Exhaust_imp(candidate,len(candidate),self.t)==True):
+            print ("found")
+            print (self.count)
+            return 1
+        else:
+            print ("not found")
+            return 0
+                        
+
 
     def try_Dynamic_search(self):
-        candidate=[]
-        for i in range(self.n):
-            if self.S[i]<=self.t:
-                candidate.append(self.S[i])
-                print( "Trying: ", candidate, ", sum:", candidate[len(candidate)-1] )
-                for j in range (len(candidate)):
-                    if candidate[j]==self.t:
-                        print ("found")
-                        return 0
-                    else:
-                        for m in range(len(candidate)):
-                            if candidate[m]+self.S[i+1]<=self.t and i+1<self.n:
-                                candidate[m]+=self.S[i+1]
-                    print( "Trying: ", candidate, ", sum:", candidate[len(candidate)-1])
-                    for k in range (len(candidate)):
-                        if candidate[k]==self.t:
-                            print ("found")
-                            return 0
+        print()
+
+
+    def Exhaust_imp(self,list2,n,sum1):
+        self.count+=1
+        print("--",sum1)
+        if sum1 == 0:
+            return True
+        if sum1!=0 and n==0:
+            return False
+        if (list2[n-1]>sum1):
+            return self.Exhaust_imp(list2,n-1,sum1)
+        print (list2)
+        print (sum1)
+        return (self.Exhaust_imp(list2,n-1,sum1) or self.Exhaust_imp(list2,n-1,sum1-list2[n-1]))
+            
+            
+        
+        
 
     def try_greedy_search(self):
         total = 0
@@ -102,32 +99,33 @@ class SSP():
 
         print (total)
 
-    def try_grasp_search(self):
-        total = 0
-        while 
-              greedy_candidate =try_random_greedy_search()
-              grasp_candidate = local_search(greedy_candidate)
-              if f(grasp_candidate) < self.t-total:
-                  total = grasp_candidate
-        return total
+   # def try_grasp_search(self):
+       # total = 0
+       # while :
+              #greedy_candidate =try_random_greedy_search()
+             # grasp_candidate = local_search(greedy_candidate)
+              #if f(grasp_candidate) < self.t-total:
+               #   total = grasp_candidate
+       # return total
 
-  def try_random_greedy_search(self):
-        total = 0
-        count=0
-        while count<self.n and total!=self.t:
-            if self.S[count]+total<=self.t:
-                total+=self.S[count]
-                print ("old total =",total-self.S[count],", add", self.S[count],"New total =",total)
-            count+=1
+  #def try_random_greedy_search(self):
+        #total = 0
+        #count=0
+        #while count<self.n and total!=self.t:
+            #if self.S[count]+total<=self.t:
+                #total+=self.S[count]
+               # print ("old total =",total-self.S[count],", add", self.S[count],"New total =",total)
+            #count+=1
 
-        print (total)
+        #print (total)
 
     
 instance = SSP()
-instance.random_yes_instance(5, bitlength=8)
+instance.random_yes_instance(4, bitlength=8)
 print( instance )
 #{x for x in s if x<5}
 #instance.try_at_random()
 #instance.try_Exaust_search()
+instance.try_Exaust_search2()
 #instance.try_Dynamic_search()
-instance.try_greedy_search()
+#instance.try_greedy_search()
