@@ -3,3 +3,5 @@
 Subset-Sum Problem (SSP)
 Given a set S = {x1, x2, . . . , xn} of integers, and an integer t (called target) decide
 if there is a subset of S whose sum is equal to t.
+
+Coder: Toby Marshall
